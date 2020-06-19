@@ -14,28 +14,24 @@
 // Left hand -   6  5  4  3  2  1  0 
 // Right hand - 13 12 11 10  9  8  7
 const rgblight_segment_t PROGMEM my_fnkeys_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    { 1, 1, HSV_WHITE},
-    { 3, 1, HSV_WHITE},
-    { 5, 1, HSV_WHITE},
-    {12, 1, HSV_WHITE},
-    {10, 1, HSV_WHITE},
-    { 8, 1, HSV_WHITE}
+    { 4, 3, HSV_PINK},
+    { 7, 3, HSV_PINK}
 );
 
 const rgblight_segment_t PROGMEM my_left_code_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    { 0, 3, HSV_BLUE}
+    { 0, 4, HSV_TEAL}
 );
 
 const rgblight_segment_t PROGMEM my_right_nump_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {11, 3, HSV_YELLOW}
+    {10, 4, HSV_CHARTREUSE}
 );
 
 const rgblight_segment_t PROGMEM my_right_navi_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    {11, 3, HSV_BLUE}
+    {10, 4, HSV_TEAL}
 );
 
 const rgblight_segment_t PROGMEM my_right_qmks_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-    { 7, 7, HSV_CORAL}
+    { 7, 7, HSV_PURPLE}
 );
 
 // Now define the array of layers. Later layers take precedence
@@ -213,7 +209,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 /* === LAYERS DEFINITION === */
 // Shortcuts for keymap readability
 #define LS_SPC  LSFT_T(KC_SPACE)
-#define LC_ENT  LCTL_T(KC_ENT)
+#define LC_BSPC LCTL_T(KC_BSPC)
+#define LC_DEL  LCTL_T(KC_DEL)
 
 #define TO_BEPO TO(_BEPO)
 #define OSL_FNK OSL(_FNKEYS)
@@ -234,11 +231,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      BP_W    ,BP_B    ,BP_EACU ,BP_P    ,BP_O    ,BP_EGRV ,BP_DLR  ,                          BP_PERC ,BP_DCIR ,BP_V    ,BP_D    ,BP_L    ,BP_J    ,BP_Z    ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     BP_CCED ,BP_A    ,BP_U    ,BP_I    ,BP_E    ,BP_COMM ,KC_BSPC ,                          KC_DEL  ,BP_C    ,BP_T    ,BP_S    ,BP_R    ,BP_N    ,BP_M    ,
+     BP_CCED ,BP_A    ,BP_U    ,BP_I    ,BP_E    ,BP_COMM ,KC_ENT  ,                          KC_ENT  ,BP_C    ,BP_T    ,BP_S    ,BP_R    ,BP_N    ,BP_M    ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      TT_CODE ,BP_AGRV ,BP_Y    ,BP_X    ,BP_DOT  ,BP_K    ,KC_TAB  ,KC_PSCR ,        KC_PGUP ,KC_PGDN ,BP_QUOT ,BP_Q    ,BP_G    ,BP_H    ,BP_F    ,TT_NAVI ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-     KC_LALT ,OSL_FNK ,KC_MEH  ,KC_LGUI ,     KC_RALT     ,LS_SPC  ,LC_ENT  ,        LC_ENT  ,LS_SPC  ,    KC_RALT      ,KC_RGUI ,TG_RNUM ,OSL_FNK ,KC_LALT 
+     KC_LALT ,OSL_FNK ,KC_MEH  ,KC_LGUI ,     KC_RALT     ,LS_SPC  ,LC_BSPC ,        LC_DEL  ,LS_SPC  ,    KC_RALT      ,KC_RGUI ,TG_RNUM ,OSL_FNK ,KC_LALT 
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
   ),
 
