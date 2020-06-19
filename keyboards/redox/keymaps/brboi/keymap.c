@@ -92,7 +92,10 @@ enum custom_keycodes {
    CM_FIND,
    CM_LOWER_OR_EQUAL,
    CM_UNDO,
-   CM_RENAME
+   CM_RENAME,
+   CM_CUT,
+   CM_COPY,
+   CM_PASTE
 };
 
 // Macros Definitions
@@ -195,6 +198,48 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
          }
          break;
+      case CM_CUT:
+         if (record->event.pressed) {
+            if (lshift_pressed)
+            {
+               RELEASE(KC_LSHIFT);
+               TAP(KC_CUT);
+               PRESS(KC_LSHIFT);
+            }
+            else {
+               CTRL(BP_X);
+            }
+            return false;
+         }
+         break;
+      case CM_COPY:
+         if (record->event.pressed) {
+            if (lshift_pressed)
+            {
+               RELEASE(KC_LSHIFT);
+               TAP(KC_COPY);
+               PRESS(KC_LSHIFT);
+            }
+            else {
+               CTRL(BP_C);
+            }
+            return false;
+         }
+         break;
+      case CM_PASTE:
+         if (record->event.pressed) {
+            if (lshift_pressed)
+            {
+               RELEASE(KC_LSHIFT);
+               TAP(KC_PASTE);
+               PRESS(KC_LSHIFT);
+            }
+            else {
+               CTRL(BP_V);
+            }
+            return false;
+         }
+         break;
    }
 
    return true;
@@ -205,6 +250,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #define CM_COMT CM_COMMENT
 #define CM_LTEQ CM_LOWER_OR_EQUAL
 #define CM_RENM CM_RENAME
+#define CM_PSTE CM_PASTE
 
 /* === LAYERS DEFINITION === */
 // Shortcuts for keymap readability
@@ -262,7 +308,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      XXXXXXX ,CM_UNDO ,KC_LEFT ,KC_DOWN ,KC_RGHT ,CM_COMT ,_______ ,                          _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______ ,CM_RENM ,KC_CUT  ,KC_COPY ,KC_PSTE ,CM_FIND ,_______ ,_______ ,        _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
+     _______ ,CM_RENM ,CM_CUT  ,CM_COPY ,CM_PSTE ,CM_FIND ,_______ ,_______ ,        _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
      _______ ,_______ ,_______ ,_______ ,     _______ ,    _______ ,_______ ,        _______ ,_______ ,    _______ ,     _______ ,_______ ,_______ ,_______
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
