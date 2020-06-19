@@ -5,7 +5,7 @@ MCU = atmega32u4
 #   Teensy       halfkay
 #   Pro Micro    caterina
 #   Atmel DFU    atmel-dfu
-#   LUFA DFU     lufa-dfu
+#   LUFA  çDFU     lufa-dfu
 #   QMK DFU      qmk-dfu
 #   ATmega32A    bootloadHID
 #   ATmega328P   USBasp

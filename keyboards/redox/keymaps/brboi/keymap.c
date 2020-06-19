@@ -72,25 +72,14 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 }
 
 /* === MACROS === * /
-enum custom_keycodes {
-  KC_NEWMACRO = SAFE_RANGE
-};
+#define KC_FNKEYS_OFF KC_CANCEL
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-   bool ralt_pressed = keyboard_report->mods & MOD_BIT(KC_RALT);
-
    switch (keycode) {
-      case KC_HOME:
-      case KC_END:
-         if (ralt_pressed) {
-            if (record->event.pressed){
-               layer_on(_CUSTOM_LAYER_CHOICE);
-               return false;
-            }
-            else {
-               layer_off(_CUSTOM_LAYER_CHOICE);
-               return false;
-            }
+      case KC_FNKEYS_OFF:
+         if (record->event.pressed){
+            layer_off(_FNKEYS);
+            return false;
          }
          break;
    }
@@ -113,7 +102,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 };
 //*/
 
-
 /* === LAYERS DEFINITION === */
 // Shortcuts for keymap readability
 #define LS_SPC  LSFT_T(KC_SPACE)
@@ -123,8 +111,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 #define RA_BSPC RALT_T(KC_BSPC)
 #define TD_LGFN TD(TD_LGUI_FN)
 #define TD_RGFN TD(TD_RGUI_FN)
-#define BT_LNAV TT(_LEFT_NAVIGATION)
-#define BT_RNUM TT(_RIGHT_NUMPAD)
+#define BT_LNAV TG(_LEFT_NAVIGATION)
+#define BT_RNUM TG(_RIGHT_NUMPAD)
 #define TO_BEPO TO(_BEPO)
 #define TO_RQMK TO(_RIGHT_QMK_SETTINGS)
 
