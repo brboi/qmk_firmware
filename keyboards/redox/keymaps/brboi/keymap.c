@@ -7,7 +7,8 @@
 #define _LEFT_CODING 2
 #define _RIGHT_NUMPAD 3
 #define _RIGHT_NAVIGATION 4
-#define _RIGHT_QMK_SETTINGS 5
+#define _RIGHT_MOUSE 5
+#define _RIGHT_QMK_SETTINGS 6
 
 /* === LIGHTING LAYERS === */
 // LEDS NUMBERS, from left to right, are:
@@ -30,6 +31,10 @@ const rgblight_segment_t PROGMEM my_right_navi_layer[] = RGBLIGHT_LAYER_SEGMENTS
     {10, 4, HSV_TEAL}
 );
 
+const rgblight_segment_t PROGMEM my_right_mouse_layer[] = RGBLIGHT_LAYER_SEGMENTS(
+    {10, 4, HSV_CYAN}
+);
+
 const rgblight_segment_t PROGMEM my_right_qmks_layer[] = RGBLIGHT_LAYER_SEGMENTS(
     { 7, 7, HSV_PURPLE}
 );
@@ -40,7 +45,8 @@ const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
     my_left_code_layer,    // 1
     my_right_nump_layer,   // 2
     my_right_navi_layer,   // 3
-    my_right_qmks_layer    // 4
+    my_right_mouse_layer,   // 4
+    my_right_qmks_layer    // 5
 );
 
 void keyboard_post_init_user(void) {
@@ -54,7 +60,8 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     rgblight_set_layer_state(1, layer_state_cmp(state, _LEFT_CODING));
     rgblight_set_layer_state(2, layer_state_cmp(state, _RIGHT_NUMPAD));
     rgblight_set_layer_state(3, layer_state_cmp(state, _RIGHT_NAVIGATION));
-    rgblight_set_layer_state(4, layer_state_cmp(state, _RIGHT_QMK_SETTINGS));
+    rgblight_set_layer_state(4, layer_state_cmp(state, _RIGHT_MOUSE));
+    rgblight_set_layer_state(5, layer_state_cmp(state, _RIGHT_QMK_SETTINGS));
     return state;
 }
 
@@ -95,7 +102,9 @@ enum custom_keycodes {
    CM_RENAME,
    CM_CUT,
    CM_COPY,
-   CM_PASTE
+   CM_PASTE,
+   CM_MOVE_LINE_DOWN,
+   CM_MOVE_LINE_UP
 };
 
 // Macros Definitions
@@ -240,6 +249,50 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return false;
          }
          break;
+      case CM_MOVE_LINE_DOWN:
+         if (record->event.pressed) {
+            if (lshift_pressed)
+            {
+               // Copy line down
+               RELEASE(KC_LSHIFT);
+               PRESS(KC_LCTL);
+               PRESS(KC_LALT);
+               TAP(KC_DOWN);
+               RELEASE(KC_LALT);
+               RELEASE(KC_LCTL);
+               PRESS(KC_LSHIFT);
+            }
+            else {
+               // Move line down
+               PRESS(KC_LALT);
+               TAP(KC_DOWN);
+               RELEASE(KC_LALT);
+            }
+            return false;
+         }
+         break;
+      case CM_MOVE_LINE_UP:
+         if (record->event.pressed) {
+            if (lshift_pressed)
+            {
+               // Copy line up
+               RELEASE(KC_LSHIFT);
+               PRESS(KC_LCTL);
+               PRESS(KC_LALT);
+               TAP(KC_UP);
+               RELEASE(KC_LALT);
+               RELEASE(KC_LCTL);
+               PRESS(KC_LSHIFT);
+            }
+            else {
+               // Move line up
+               PRESS(KC_LALT);
+               TAP(KC_UP);
+               RELEASE(KC_LALT);
+            }
+            return false;
+         }
+         break;
    }
 
    return true;
@@ -251,6 +304,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #define CM_LTEQ CM_LOWER_OR_EQUAL
 #define CM_RENM CM_RENAME
 #define CM_PSTE CM_PASTE
+#define CM_MVLD CM_MOVE_LINE_DOWN
+#define CM_MVLU CM_MOVE_LINE_UP
 
 /* === LAYERS DEFINITION === */
 // Shortcuts for keymap readability
@@ -262,10 +317,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #define OSL_FNK OSL(_FNKEYS)
 #define TO_FNKY TO(_FNKEYS)
 #define TG_FNKY TG(_FNKEYS)
-#define TT_CODE TT(_LEFT_CODING)
+#define TG_CODE TG(_LEFT_CODING)
 #define TO_RNUM TO(_RIGHT_NUMPAD)
 #define TG_RNUM TG(_RIGHT_NUMPAD)
-#define TT_NAVI TT(_RIGHT_NAVIGATION)
+#define TG_NAVI TG(_RIGHT_NAVIGATION)
+#define TG_MOUS TG(_RIGHT_MOUSE)
+#define TT_MOUS TT(_RIGHT_MOUSE)
 #define TO_RQMK TO(_RIGHT_QMK_SETTINGS)
 
 // The keymap
@@ -279,7 +336,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      BP_CCED ,BP_A    ,BP_U    ,BP_I    ,BP_E    ,BP_COMM ,KC_ENT  ,                          KC_ENT  ,BP_C    ,BP_T    ,BP_S    ,BP_R    ,BP_N    ,BP_M    ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     TT_CODE ,BP_AGRV ,BP_Y    ,BP_X    ,BP_DOT  ,BP_K    ,KC_TAB  ,KC_PSCR ,        KC_PGUP ,KC_PGDN ,BP_QUOT ,BP_Q    ,BP_G    ,BP_H    ,BP_F    ,TT_NAVI ,
+     TG_CODE ,BP_AGRV ,BP_Y    ,BP_X    ,BP_DOT  ,BP_K    ,KC_TAB  ,KC_PSCR ,        KC_PGUP ,KC_PGDN ,BP_QUOT ,BP_Q    ,BP_G    ,BP_H    ,BP_F    ,TG_NAVI ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
      KC_LALT ,OSL_FNK ,KC_MEH  ,KC_LGUI ,     KC_RALT     ,LS_SPC  ,LC_BSPC ,        LC_DEL  ,LS_SPC  ,    KC_RALT      ,KC_RGUI ,TG_RNUM ,OSL_FNK ,KC_LALT 
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
@@ -304,9 +361,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                                            _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     XXXXXXX ,CM_2OR  ,KC_HOME ,KC_UP   ,KC_END  ,CM_LTEQ ,_______ ,                          _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
+     CM_MVLU ,CM_2OR  ,KC_HOME ,KC_UP   ,KC_END  ,CM_LTEQ ,_______ ,                          _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     XXXXXXX ,CM_UNDO ,KC_LEFT ,KC_DOWN ,KC_RGHT ,CM_COMT ,_______ ,                          _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
+     CM_MVLD ,CM_UNDO ,KC_LEFT ,KC_DOWN ,KC_RGHT ,CM_COMT ,_______ ,                          _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      _______ ,CM_RENM ,CM_CUT  ,CM_COPY ,CM_PSTE ,CM_FIND ,_______ ,_______ ,        _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
@@ -334,9 +391,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                          _______ ,KC_PGUP ,KC_HOME ,KC_UP   ,KC_END  ,XXXXXXX ,XXXXXXX ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                          _______ ,KC_PGDN ,KC_LEFT ,KC_DOWN ,KC_RGHT ,XXXXXXX ,XXXXXXX ,
+     _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                          _______ ,KC_PGDN ,KC_LEFT ,KC_DOWN ,KC_RGHT ,XXXXXXX ,TT_MOUS ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,        _______ ,_______ ,XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX ,XXXXXXX ,_______ ,
+  //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
+     _______ ,_______ ,_______ ,_______ ,     _______ ,    _______ ,_______ ,        _______ ,_______ ,    _______ ,     _______ ,TO_RNUM ,_______ ,_______
+  //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
+  ),
+
+  [_RIGHT_MOUSE] = LAYOUT(
+  //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
+     _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                                            _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,
+  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                          _______ ,KC_WH_U ,KC_WH_L ,KC_MS_U ,KC_WH_R ,KC_ACL0 ,KC_ACL2 ,
+  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,                          _______ ,KC_WH_D ,KC_MS_L ,KC_MS_D ,KC_MS_R ,XXXXXXX ,TG_MOUS ,
+  //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
+     _______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,_______ ,        _______ ,_______ ,KC_BTN4 ,KC_BTN1 ,KC_BTN3 ,KC_BTN2 ,KC_BTN5 ,TG_MOUS ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
      _______ ,_______ ,_______ ,_______ ,     _______ ,    _______ ,_______ ,        _______ ,_______ ,    _______ ,     _______ ,TO_RNUM ,_______ ,_______
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
