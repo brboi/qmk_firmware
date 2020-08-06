@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define EE_HANDS
 
 #define TAPPING_TOGGLE 2
-#define TAPPING_TERM 150
-#define PERMISSIVE_HOLD
+#define TAPPING_TERM 200
+// #define PERMISSIVE_HOLD
 
 #undef RGBLED_NUM
 #define RGBLIGHT_ANIMATIONS
