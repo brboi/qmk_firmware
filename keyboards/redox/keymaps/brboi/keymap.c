@@ -311,6 +311,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // Shortcuts for keymap readability
 #define LS_SPC  LSFT_T(KC_SPACE)
 #define LC_BSPC LCTL_T(KC_BSPC)
+#define RA_BSPC RALT_T(KC_BSPC)
 #define LC_DEL  LCTL_T(KC_DEL)
 
 #define KC_SGUI LSFT(KC_LGUI)
@@ -343,10 +344,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      TT_CODE ,BP_AGRV ,BP_Y    ,BP_X    ,BP_DOT  ,BP_K    ,KC_TAB  ,KC_DEL  ,        KC_DEL  ,KC_PSCR ,BP_QUOT ,BP_Q    ,BP_G    ,BP_H    ,BP_F    ,TT_NAVI ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤
-     KC_LALT ,OSL_FNK ,KC_MEH  ,KC_LGUI ,     KC_RALT     ,LS_SPC  ,LC_BSPC ,        LC_BSPC ,LS_SPC  ,    KC_RALT      ,KC_RGUI ,KC_MEH  ,OSL_FNK ,KC_LALT 
+     KC_LALT ,OSL_FNK ,KC_LOCK ,KC_LGUI ,     KC_LCTL     ,LS_SPC  ,RA_BSPC ,        RA_BSPC ,LS_SPC  ,    KC_RCTL      ,KC_RGUI ,KC_LOCK ,OSL_FNK ,KC_LALT 
   //└────────┴────────┴────────┴────────┘    └────────┘   └────────┴────────┘       └────────┴────────┘   └────────┘    └────────┴────────┴────────┴────────┘
   ),
-
+ 
   [_FNKEYS] = LAYOUT(
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      _______ ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,                                            KC_F6   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,TO_RQMK ,
